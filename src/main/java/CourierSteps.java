@@ -24,13 +24,12 @@ public class CourierSteps {
                 .then();
     }
 
-    public void deleteCourier(Courier courier){
-        given()
+    public ValidatableResponse deleteCourier(Integer id){
+        return given()
                 .header("Content-type", "application/json")
                 .baseUri(RestConfig.HOSTSCOOTER)
-                .pathParam("id", courier.getId())
                 .when()
-                .delete("/api/v1/courier/{id}")
+                .delete("/api/v1/courier/" + id)
                 .then();
 
     }

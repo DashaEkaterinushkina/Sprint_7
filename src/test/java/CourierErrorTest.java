@@ -1,10 +1,13 @@
 import io.qameta.allure.junit4.DisplayName;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 public class CourierErrorTest {
     Courier courier;
+    private CourierSteps courierSteps = new CourierSteps();
+    Integer id = 0;
 
     @Before
     public void setUp() {
@@ -32,6 +35,9 @@ public class CourierErrorTest {
         new CourierSteps()
                 .createCourier(courier);
 
+        id = courierSteps.login(courier)
+                .extract().body().path("id");
+
         courier.setPassword(RandomStringUtils.randomAlphabetic(10));
         new CourierSteps()
                 .createCourier(courier)
@@ -45,6 +51,9 @@ public class CourierErrorTest {
         new CourierSteps()
                 .createCourier(courier);
 
+        id = courierSteps.login(courier)
+                .extract().body().path("id");
+
         courier.setPassword(RandomStringUtils.randomAlphabetic(10));
         new CourierSteps()
                 .login(courier)
@@ -56,6 +65,9 @@ public class CourierErrorTest {
     public void checkErrorWithoutFieldAuthorizeTest(){
         new CourierSteps()
                 .createCourier(courier);
+
+        id = courierSteps.login(courier)
+                .extract().body().path("id");
 
         courier.setLogin(null);
         new CourierSteps()
@@ -71,4 +83,12 @@ public class CourierErrorTest {
                 .login(courier)
                 .statusCode(404);   //Учетная запись не найдена
     }
+
+    @After
+    public void deleteCourier() {
+        if (id != 0)  {
+            courierSteps.deleteCourier(id);
+        }
+    }
+
 }

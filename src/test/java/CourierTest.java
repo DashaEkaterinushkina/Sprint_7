@@ -56,8 +56,7 @@ public class CourierTest {
     public void tearDown() {        //удаление курьера
         Integer id = courierSteps.login(courier)
                 .extract().body().path("id");
-        courier.setId(id);
-        courierSteps.deleteCourier(courier);
+        courierSteps.deleteCourier(id);
 
     }
 }
